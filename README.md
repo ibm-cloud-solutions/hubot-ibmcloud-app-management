@@ -1,3 +1,7 @@
+
+[![Dependency Status](https://dependencyci.com/github/ibm-cloud-solutions/hubot-ibmcloud-app-management/badge)](https://dependencyci.com/github/ibm-cloud-solutions/hubot-ibmcloud-app-management)
+[![npm](https://img.shields.io/npm/v/hubot-ibmcloud-app-management.svg?maxAge=2592000)](https://www.npmjs.com/package/hubot-ibmcloud-app-management)
+
 # hubot-ibmcloud-app-management
 
 A hubot script for management of your the IBM Cloud apps.
