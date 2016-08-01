@@ -14,7 +14,7 @@ A hubot script for management of your the IBM Cloud apps.
 * [License](#license)
 * [Contribute](#contribute)
 
-## Usage <a id="usage"></a>
+## Usage
 
 Steps for adding this to your existing hubot:
 
@@ -43,15 +43,15 @@ export HUBOT_BLUEMIX_PASSWORD=<Password for the Bluemix use>
 - `hubot app status [app]` - Get status for an app.
 - `hubot app stop [app]` - Stop an app.
 
-## Hubot Adapter Setup <a id="hubot-adapter-setup"></a>
+## Hubot Adapter Setup
 
 Hubot supports a variety of adapters to connect to popular chat clients.  For more feature rich experiences you can setup the following adapters:
-- [Slack setup](./docs/adapters/slack.md)
-- [Facebook Messenger setup](./docs/adapters/facebook.md)
+- [Slack setup](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management/blob/master/docs/adapters/slack.md)
+- [Facebook Messenger setup](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management/blob/master/docs/adapters/facebook.md)
 
-## Development <a id="development"></a>
+## Development
 
-Please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) before starting any work.  Steps for running this script for development purposes:
+Please refer to the [CONTRIBUTING.md](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management/blob/master/CONTRIBUTING.md) before starting any work.  Steps for running this script for development purposes:
 
 ### Configuration Setup
 
@@ -79,14 +79,14 @@ Hubot supports a variety of adapters to connect to popular chat clients.
 
 If you just want to use:
  - Terminal: run `npm run start`
- - [Slack: link to setup instructions](./docs/adapters/slack.md)
- - [Facebook Messenger: link to setup instructions](./docs/adapters/facebook.md)
+ - [Slack: link to setup instructions](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management/blob/master/docs/adapters/slack.md)
+ - [Facebook Messenger: link to setup instructions](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management/blob/master/docs/adapters/facebook.md)
 
 
-## License <a id="license"></a>
+## License
 
-See [LICENSE.txt](./LICENSE.txt) for license information.
+See [LICENSE.txt](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management/blob/master/LICENSE.txt) for license information.
 
-## Contribute <a id="contribute"></a>
+## Contribute
 
-Please check out our [Contribution Guidelines](./CONTRIBUTING.md) for detailed information on how you can lend a hand.
+Please check out our [Contribution Guidelines](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management/blob/master/CONTRIBUTING.md) for detailed information on how you can lend a hand.
