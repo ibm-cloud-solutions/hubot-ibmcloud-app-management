@@ -1,0 +1,171 @@
+{
+	"name": "IBMcloudAppManagment",
+	"version": "1.0",
+	"classes":[
+		{
+			"class": "bluemix.app.help",
+	  		"emittarget": "bluemix.app.help",
+	  		"texts": [
+		  		"I want help with apps.",
+		  		"Can you help me with apps?",
+		  		"Please help me with applications.",
+		  		"help apps"
+	  		]
+  		},
+  		{
+	  		"class": "bluemix.app.list",
+	  		"emittarget": "bluemix.app.list",
+	  		"texts": [
+				"Show my apps",
+				"Show me my applications.",
+				"List applications",
+				"I want to see my bluemix apps",
+				"I’d like to get a list of my apps",
+				"Show me my apps",
+				"What are my apps",
+				"show me my apps",
+				"how many apps do I have?",
+				"apps"
+  			]
+  		},
+		{
+		   "class": "bluemix.app.logs",
+		   "emittarget": "bluemix.app.logs",
+		   "texts": [
+			   "logs",
+			   "Show me the logs for app",
+			   "I want to browse the logs for application",
+			   "Check on app"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application for which you want the logs?"
+			   }
+	       ]
+	   },
+	   {
+		   "class": "bluemix.app.remove",
+		   "emittarget": "bluemix.app.remove",
+		   "texts": [
+			   "Remove application",
+			   "Delete app"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application you want to remove?"
+			   }
+	       ]
+	   },
+	   {
+		   "class": "bluemix.app.restage",
+		   "emittarget": "bluemix.app.restage",
+		   "texts": [
+			   "Restage application",
+			   "I want to restage",
+			   "I want you to restage toddForPresident"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application you want to restage?"
+			   }
+	       ]
+	   },
+	   {
+		   "class": "bluemix.app.scale",
+		   "emittarget": "bluemix.app.scale",
+		   "texts": [
+			   "Scale application to have instances",
+			   "Add another instance to my application.",
+			   "Add a new instance of app",
+			   "scale my app",
+			   "scale up app",
+			   "scale down application",
+			   "app needs more power"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application you want to scale?"
+			   },
+			   {
+			       "name": "instances",
+			       "type": "number",
+			       "prompt": "OK. How many instances would you like to scale to?"
+			   }
+	       ]
+	   },
+	   {
+		   "class": "bluemix.app.start",
+		   "emittarget": "bluemix.app.start",
+		   "texts": [
+			   "Start application",
+			   "Start app",
+			   "I want to start app.",
+			   "I want to start my application",
+			   "Can you please start my app?",
+			   "kickoff app",
+			   "turn on app",
+			   "enable appliction",
+			   "fire up app"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application you want to start?"
+			   }
+	       ]
+	   },
+	   {
+		   "class": "bluemix.app.status",
+		   "emittarget": "bluemix.app.status",
+		   "texts": [
+			   "Status of app",
+			   "I want the status of?",
+			   "what's the status of app?",
+			   "How’s my app doing?"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application for which you want the status?"
+			   }
+	       ]
+	   },
+	   {
+		   "class": "bluemix.app.stop",
+		   "emittarget": "bluemix.app.stop",
+		   "texts": [
+			   "Stop the application",
+			   "Stop app",
+			   "Kill application",
+			   "Kill my app",
+			   "terminate app",
+			   "shutdown app",
+			   "terminate application",
+			   "disable app"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application you want to stop?"
+			   }
+	       ]
+	   }
+   ],
+   "parameter.values" : [
+       {
+           "name": "appname",
+           "values": []
+       }
+   ]
+}
