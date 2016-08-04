@@ -68,7 +68,7 @@
 		   "emittarget": "bluemix.app.restage",
 		   "description": "Restage a Bluemix application",
 		   "texts": [
-			   "Restage my application",
+			   "Restage my application"
 		   ],
 	       "parameters" : [
 			   {
