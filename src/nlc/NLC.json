@@ -5,6 +5,7 @@
 		{
 			"class": "bluemix.app.help",
 	  		"emittarget": "bluemix.app.help",
+			"description": "Help with Bluemix application management",
 	  		"texts": [
 		  		"I want help with apps.",
 		  		"Can you help me with apps?",
@@ -15,26 +16,27 @@
   		{
 	  		"class": "bluemix.app.list",
 	  		"emittarget": "bluemix.app.list",
+			"description": "List Bluemix applications",
 	  		"texts": [
 				"Show my apps",
 				"Show me my applications.",
 				"List applications",
-				"I want to see my bluemix apps",
-				"I’d like to get a list of my apps",
+				"See my bluemix apps",
+				"Get a list of my apps",
 				"Show me my apps",
 				"What are my apps",
-				"show me my apps",
-				"how many apps do I have?",
+				"How many apps do I have?",
 				"apps"
   			]
   		},
 		{
 		   "class": "bluemix.app.logs",
 		   "emittarget": "bluemix.app.logs",
+		   "description": "Show logs for a Bluemix application",
 		   "texts": [
 			   "logs",
 			   "Show me the logs for app",
-			   "I want to browse the logs for application",
+			   "Browse the logs for application",
 			   "Check on app"
 		   ],
 	       "parameters" : [
@@ -48,6 +50,7 @@
 	   {
 		   "class": "bluemix.app.remove",
 		   "emittarget": "bluemix.app.remove",
+		   "description": "Remove a Bluemix application",
 		   "texts": [
 			   "Remove application",
 			   "Delete app"
@@ -63,10 +66,9 @@
 	   {
 		   "class": "bluemix.app.restage",
 		   "emittarget": "bluemix.app.restage",
+		   "description": "Restage a Bluemix application",
 		   "texts": [
-			   "Restage application",
-			   "I want to restage",
-			   "I want you to restage toddForPresident"
+			   "Restage my application"
 		   ],
 	       "parameters" : [
 			   {
@@ -79,6 +81,7 @@
 	   {
 		   "class": "bluemix.app.scale",
 		   "emittarget": "bluemix.app.scale",
+		   "description": "Scale a Bluemix application",
 		   "texts": [
 			   "Scale application to have instances",
 			   "Add another instance to my application.",
@@ -104,12 +107,10 @@
 	   {
 		   "class": "bluemix.app.start",
 		   "emittarget": "bluemix.app.start",
+		   "description": "Start a Bluemix application",
 		   "texts": [
 			   "Start application",
 			   "Start app",
-			   "I want to start app.",
-			   "I want to start my application",
-			   "Can you please start my app?",
 			   "kickoff app",
 			   "turn on app",
 			   "enable appliction",
@@ -126,10 +127,10 @@
 	   {
 		   "class": "bluemix.app.status",
 		   "emittarget": "bluemix.app.status",
+		   "description": "Show the status of a Bluemix application",
 		   "texts": [
 			   "Status of app",
-			   "I want the status of?",
-			   "what's the status of app?",
+			   "What's the status of app?",
 			   "How’s my app doing?"
 		   ],
 	       "parameters" : [
@@ -143,6 +144,7 @@
 	   {
 		   "class": "bluemix.app.stop",
 		   "emittarget": "bluemix.app.stop",
+		   "description": "Stop a Bluemix application",
 		   "texts": [
 			   "Stop the application",
 			   "Stop app",
