@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "hubot": "^2.19.0",
-    "hubot-ibmcloud-formatter": "latest",
+    "hubot-ibmcloud-formatter": ">=0.0.30",
     "i18n-2": "*"
   },
   "engines": {
