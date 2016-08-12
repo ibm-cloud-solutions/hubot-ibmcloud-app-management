@@ -79,6 +79,24 @@
 	       ]
 	   },
 	   {
+		   "class": "bluemix.app.restart",
+		   "emittarget": "bluemix.app.restart",
+		   "description": "Restart a Bluemix application",
+		   "texts": [
+			   "Restart application",
+			   "Retart app",
+			   "turn off and on app",
+			   "reenable appliction"
+		   ],
+	       "parameters" : [
+			   {
+			       "name": "appname",
+			       "type": "entity",
+			       "prompt": "OK. What is the name of the application you want to start?"
+			   }
+	       ]
+	   },
+	   {
 		   "class": "bluemix.app.scale",
 		   "emittarget": "bluemix.app.scale",
 		   "description": "Scale a Bluemix application",
@@ -89,18 +107,24 @@
 			   "scale my app",
 			   "scale up app",
 			   "scale down application",
-			   "app needs more power"
+			   "scale instances",
+			   "app needs more power",
+			   "I'd like to give my application more memory",
+			   "increase memory for my app",
+			   "decrease memory for my app",
+			   "set memory for my application",
+			   "scale memory",
+			   "I need to change disk space for application",
+			   "increase disk space for my app",
+			   "decrease disk space for my app",
+			   "set disk space for my application",
+			   "scale disk space"
 		   ],
 	       "parameters" : [
 			   {
 			       "name": "appname",
 			       "type": "entity",
 			       "prompt": "OK. What is the name of the application you want to scale?"
-			   },
-			   {
-			       "name": "instances",
-			       "type": "number",
-			       "prompt": "OK. How many instances would you like to scale to?"
 			   }
 	       ]
 	   },

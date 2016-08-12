@@ -36,9 +36,22 @@ const invalidApp = 'testApp4';
 // Length of time to wait for a message
 const timeout = 1000;
 
+function waitForMessageQueue(room, len){
+	return sprinkles.eventually({
+		timeout: timeout
+	}, function() {
+		if (room.messages.length < len) {
+			throw new Error('too soon');
+		}
+	}).then(() => false).catch(() => true).then((success) => {
+		// Great.  Move on to tests
+		expect(room.messages.length).to.eql(len);
+	});
+}
+
 // Passing arrow functions to mocha is discouraged: https://mochajs.org/#arrow-functions
 // return promises from mocha tests rather than calling done() - http://tobyho.com/2015/12/16/mocha-with-promises/
-describe('Interacting with Bluemix via Slack', function() {
+describe('Interacting with Bluemix through regular expression interface', function() {
 
 	let room;
 	let cf;
@@ -269,36 +282,389 @@ describe('Interacting with Bluemix via Slack', function() {
 		});
 	});
 
-	context('user calls `app scale`', function() {
-
-		beforeEach(function() {
-			let messageLen = 5;
-
-			// Don't move on from this until the promise resolves
-			room.user.say('mimiron', `@hubot app scale ${invalidApp}Name 2`);
-			room.user.say('mimiron', `@hubot app scale ${validApp}Name 2`);
-			return sprinkles.eventually({
-				timeout: timeout
-			}, function() {
-				if (room.messages.length < messageLen) {
-					throw new Error('too soon');
-				}
-			}).then(() => false).catch(() => true).then((success) => {
-				// Great.  Move on to tests
-				expect(room.messages.length).to.eql(messageLen);
+	context('user calls `app restart` with valid app', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app restart ${validApp}Name`).then(() => {
+				let response = room.messages[room.messages.length - 1];
+				expect(response).to.eql(['hubot', '@mimiron ' + i18n.__('app.restart.prompt', validApp + 'Name')]);
+				room.user.say('mimiron', 'yes');
+				return sprinkles.eventually({
+					timeout: timeout
+				}, function() {
+					if (room.messages.length < 4) {
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+					expect(room.messages.length).to.eql(5);
+					expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.restart.in.progress', validApp + 'Name', 'testSpace')]);
+					expect(room.messages[4]).to.eql(['hubot', '@mimiron ' + i18n.__('app.restart.success', validApp + 'Name')]);
+					done();
+				});
 			});
-
 		});
+	});
 
-		it('should respond with not found', function() {
-			let error = i18n.__('app.general.not.found', invalidApp + 'Name', 'testSpace');
-			expect(room.messages[3]).to.eql(['hubot', '@mimiron ' +
-				i18n.__('app.scale.failure', invalidApp + 'Name', error)
-			]);
+	context('user calls `app restart` with invalid app', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app restart ${invalidApp}Name`).then(() => {
+				let response = room.messages[room.messages.length - 1];
+				expect(response).to.eql(['hubot', '@mimiron ' + i18n.__('app.restart.prompt', invalidApp + 'Name')]);
+				room.user.say('mimiron', 'yes');
+				return sprinkles.eventually({
+					timeout: timeout
+				}, function() {
+					if (room.messages.length < 4) {
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+					expect(room.messages.length).to.eql(5);
+					let error = i18n.__('app.general.not.found', invalidApp + 'Name', 'testSpace');
+					expect(room.messages[4]).to.eql(['hubot', '@mimiron ' + i18n.__('app.restart.failure', invalidApp + 'Name', error)]);
+					done();
+				});
+			});
 		});
+	});
 
-		it('should respond with scaled', function() {
-			expect(room.messages[4]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success', validApp + 'Name', 2)]);
+	context('user calls `app scale` with invalid app', function() {
+		it('Should respond with not found.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${invalidApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages.length).to.eql(2);
+				let error = i18n.__('app.general.not.found', invalidApp + 'Name', 'testSpace');
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.failure', invalidApp + 'Name', error)]);
+				done();
+			}).catch(function(error) {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify nothing', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.failure', validApp + 'Name', i18n.__('app.scale.abort'))]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify instances', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.instances')]);
+				room.user.say('mimiron', '@hubot 4');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 11);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[10]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.instances', validApp + 'Name', 4)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify memory', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.memory')]);
+				room.user.say('mimiron', '@hubot 1024');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 11);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[10]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.memory', validApp + 'Name', 1024)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify disk', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.disk_quota')]);
+				room.user.say('mimiron', '@hubot 2048');
+				return waitForMessageQueue(room, 11);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[10]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.disk', validApp + 'Name', 2048)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify instances/memory', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.instances')]);
+				room.user.say('mimiron', '@hubot 4');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.memory')]);
+				room.user.say('mimiron', '@hubot 1024');
+				return waitForMessageQueue(room, 10);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 13);
+			}).then(() => {
+				expect(room.messages[11]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[12]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.instances.memory', validApp + 'Name', 4, 1024)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify instances/disk', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.instances')]);
+				room.user.say('mimiron', '@hubot 4');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 10);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.disk_quota')]);
+				room.user.say('mimiron', '@hubot 2048');
+				return waitForMessageQueue(room, 13);
+			}).then(() => {
+				expect(room.messages[11]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[12]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.instances.disk', validApp + 'Name', 4, 2048)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify memory/disk', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.memory')]);
+				room.user.say('mimiron', '@hubot 1024');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 10);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.disk_quota')]);
+				room.user.say('mimiron', '@hubot 2048');
+				return waitForMessageQueue(room, 13);
+			}).then(() => {
+				expect(room.messages[11]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[12]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.memory.disk', validApp + 'Name', 1024, 2048)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify instances/memory/disk', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.instances')]);
+				room.user.say('mimiron', '@hubot 4');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.memory')]);
+				room.user.say('mimiron', '@hubot 1024');
+				return waitForMessageQueue(room, 10);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 12);
+			}).then(() => {
+				expect(room.messages[11]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.disk_quota')]);
+				room.user.say('mimiron', '@hubot 2048');
+				return waitForMessageQueue(room, 15);
+			}).then(() => {
+				expect(room.messages[13]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[14]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.instances.memory.disk', validApp + 'Name', 4, 1024, 2048)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify junk', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.instances')]);
+				room.user.say('mimiron', '@hubot junk');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 8);
+			}).then(() => {
+				expect(room.messages[7]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.memory')]);
+				room.user.say('mimiron', '@hubot junk');
+				return waitForMessageQueue(room, 10);
+			}).then(() => {
+				expect(room.messages[9]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.disk_quota', validApp + 'Name', 1024)]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 12);
+			}).then(() => {
+				expect(room.messages[11]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.value.disk_quota')]);
+				room.user.say('mimiron', '@hubot junk');
+				return waitForMessageQueue(room, 14);
+			}).then(() => {
+				expect(room.messages[13]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.failure', validApp + 'Name', i18n.__('app.scale.abort'))]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app; specify exit', function() {
+		it('Should have a clean conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.instances', validApp + 'Name', 2)]);
+				room.user.say('mimiron', '@hubot no');
+				return waitForMessageQueue(room, 4);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.prompt.set.memory', validApp + 'Name', 512)]);
+				room.user.say('mimiron', '@hubot exit');
+				return waitForMessageQueue(room, 6);
+			}).then(() => {
+				expect(room.messages[5]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.failure', validApp + 'Name', i18n.__('app.scale.abort'))]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
+		});
+	});
+
+	context('user calls `app scale` with valid app, instances/memory/disk', function() {
+		it('Should process command without conversation.', function(done) {
+			return room.user.say('mimiron', `@hubot app scale ${validApp}Name 4 instances 1024 memory 2048 disk`).then(() => {
+				return waitForMessageQueue(room, 3);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[2]).to.eql(['hubot', '@mimiron ' + i18n.__('app.scale.success.instances.memory.disk', validApp + 'Name', 4, 1024, 2048)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
 		});
 	});
 
@@ -428,7 +794,8 @@ describe('Interacting with Bluemix via Slack', function() {
 			help += 'hubot app list|show  - ' + i18n.__('help.app.list') + '\n';
 			help += 'hubot app logs [app] - ' + i18n.__('help.app.logs') + '\n';
 			help += 'hubot app restage [app] - ' + i18n.__('help.app.restage') + '\n';
-			help += 'hubot app scale [app] [num]  - ' + i18n.__('help.app.scale') + '\n';
+			help += 'hubot app restart [app] - ' + i18n.__('help.app.restart') + '\n';
+			help += 'hubot app scale [app]  - ' + i18n.__('help.app.scale') + '\n';
 			help += 'hubot app start [app] - ' + i18n.__('help.app.start') + '\n';
 			help += 'hubot app status [app] - ' + i18n.__('help.app.status') + '\n';
 			help += 'hubot app stop [app] - ' + i18n.__('help.app.stop') + '\n';

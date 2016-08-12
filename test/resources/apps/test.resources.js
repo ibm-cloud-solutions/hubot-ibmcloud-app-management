@@ -30,6 +30,11 @@ module.exports = {
 			{
 				metadata: {
 					guid: 'testApp1Guid'
+				},
+				entity: {
+					instances: 2,
+					memory: 512,
+					disk_quota: 1024
 				}
 			}
 		]

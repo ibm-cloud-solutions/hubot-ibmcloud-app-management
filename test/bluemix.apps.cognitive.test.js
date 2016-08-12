@@ -14,6 +14,23 @@ const mockUtils = require('./mock.utils.cf.js');
 const validApp = 'testApp1Name';
 // const invalidApp = 'testApp4Name';
 
+// --------------------------------------------------------------
+// i18n (internationalization)
+// It will read from a peer messages.json file.  Later, these
+// messages can be referenced throughout the module.
+// --------------------------------------------------------------
+var i18n = new (require('i18n-2'))({
+	locales: ['en'],
+	extension: '.json',
+	// Add more languages to the list of locales when the files are created.
+	directory: __dirname + '/../src/messages',
+	defaultLocale: 'en',
+	// Prevent messages file from being overwritten in error conditions (like poor JSON).
+	updateFiles: false
+});
+// At some point we need to toggle this setting based on some user input.
+i18n.setLocale('en');
+
 // Passing arrow functions to mocha is discouraged: https://mochajs.org/#arrow-functions
 // return promises from mocha tests rather than calling done() - http://tobyho.com/2015/12/16/mocha-with-promises/
 describe('Interacting with Natural Language -', function() {
@@ -44,7 +61,8 @@ describe('Interacting with Natural Language -', function() {
 				expect(event.message).to.contain('app list|show');
 				expect(event.message).to.contain('app logs [app]');
 				expect(event.message).to.contain('app restage [app]');
-				expect(event.message).to.contain('app scale [app] [num]');
+				expect(event.message).to.contain('app restart [app]');
+				expect(event.message).to.contain('app scale [app]');
 				expect(event.message).to.contain('app start [app]');
 				expect(event.message).to.contain('app status [app]');
 				expect(event.message).to.contain('app stop [app]');
@@ -182,46 +200,51 @@ describe('Interacting with Natural Language -', function() {
 	});
 
 
-	context('app scale - user says `I want to scale app testApp1Name to 4 instances`', function() {
-		it('should scale `testApp1Name` when user says `I want to scale app testApp1Name to 4 instances.`', function(done) {
+	context('app scale - user says `I want to scale app testApp1Name`', function() {
+		it('should scale `testApp1Name` when user says `I want to scale app testApp1Name.`', function(done) {
+
+			// 2. Handle the dialog question.
+			var replyFn = function(msg){
+				if (msg.includes(i18n.__('app.scale.prompt.set.instances', 'testApp1Name', 2))) {
+					room.user.say('mimiron', 'no');
+				}
+				else if (msg.includes(i18n.__('app.scale.prompt.set.memory', 'testApp1Name', 512))) {
+					room.user.say('mimiron', 'no');
+				}
+				else if (msg.includes(i18n.__('app.scale.prompt.set.disk_quota', 'testApp1Name', 1024))) {
+					room.user.say('mimiron', 'no');
+				}
+				else {
+					done(new Error(`Unexpected dialog prompt [${msg}].`));
+				}
+			};
 
 			// 4. Listens for dialog response.
 			room.robot.on('ibmcloud.formatter', (event) => {
-				if (event.message === 'Scaling application *testApp1Name* in the *testSpace* space to *4* instances. Change spaces using *space set [space_name]*.') {
-					expect(event.message).to.contain('Scaling application *testApp1Name* in the *testSpace* space to *4* instances. Change spaces using *space set [space_name]*.');
-				}
-				else if (event.message === 'Application *testApp1Name* has been scaled to *4* instance(s).'){
-					expect(event.message).to.contain('Application *testApp1Name* has been scaled to *4* instance(s).');
+				if (event.message === i18n.__('app.scale.failure', 'testApp1Name', i18n.__('app.scale.abort'))) {
+					expect(event.message).to.contain(i18n.__('app.scale.failure', 'testApp1Name', i18n.__('app.scale.abort')));
 					done();
+				}
+				else {
+					done(new Error('Unexpected dialog message [${event.message}].'));
 				}
 			});
 
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to scale app testApp1Name to 4 instances.', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('bluemix.app.scale', res, { appname: 'testApp1Name', instances: '4' });
+			var res = { message: {text: 'I want to scale app testApp1Name.', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			room.robot.emit('bluemix.app.scale', res, { appname: 'testApp1Name' });
 
 		});
 
 		it('should fail scale app due to missing appname parameter ', function(done) {
 
 			room.robot.on('ibmcloud.formatter', (event) => {
-				expect(event.message).to.contain('I\'m having problems understanding the name of your app. To scale an app use *app scale [app] [num]*');
+				expect(event.message).to.contain(i18n.__('cognitive.parse.problem.scale'));
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to scale app to 4 instances', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('bluemix.app.scale', res, { instances: '4' });
-		});
-
-		it('should fail scale app due to missing instances parameter ', function(done) {
-
-			room.robot.on('ibmcloud.formatter', (event) => {
-				expect(event.message).to.contain('I\'m having problems understanding the number of desired instances. To scale an app use *app scale [app] [num]*');
-				done();
-			});
-			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to scale app testApp1Name', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('bluemix.app.scale', res, { appname: 'testApp1Name' });
+			var res = { message: {text: 'I want to scale app', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('bluemix.app.scale', res, {});
 		});
 	});
 
@@ -330,6 +353,40 @@ describe('Interacting with Natural Language -', function() {
 			// 1. Mock Natural Language message by calling emit.
 			var res = { message: {text: 'I want to stop app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.stop', res, {});
+		});
+	});
+
+	context('app restart', function() {
+		it('should restart `testApp1Name` when user says `I want to restart app testApp1Name`', function(done) {
+
+			// 4. Listens for dialog response.
+			room.robot.on('ibmcloud.formatter', (event) => {
+				expect(event.message).to.contain('Restarting application *testApp1Name* in the *testSpace* space.');
+				done();
+			});
+
+			// 2. Handle the dialog question.
+			var replyFn = function(msg){
+				// 3. Respond to open dialog.
+				if (msg.indexOf('Are you sure that you want to restart') >= 0) {
+					return room.user.say('mimiron', 'yes');
+				}
+			};
+
+			// 1. Mock Natural Language message by calling emit.
+			var res = { message: {text: 'I want to restart app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			room.robot.emit('bluemix.app.restart', res, { appname: 'testApp1Name' });
+		});
+
+		it('should fail restart app due to missing appname parameter ', function(done) {
+
+			room.robot.on('ibmcloud.formatter', (event) => {
+				expect(event.message).to.contain('I\'m having problems understanding the name of your app. To restart an app use *app restart [app]*');
+				done();
+			});
+			// 1. Mock Natural Language message by calling emit.
+			var res = { message: {text: 'I want to restart app', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('bluemix.app.restart', res, {});
 		});
 	});
 });

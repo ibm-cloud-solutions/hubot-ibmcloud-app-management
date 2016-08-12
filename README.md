@@ -39,7 +39,8 @@ export HUBOT_BLUEMIX_PASSWORD=<Password for the Bluemix use>
 - `hubot app list` - List apps.
 - `hubot app logs [app]` - Show logs for an app.
 - `hubot app restage [app]` - Restage an app.
-- `hubot app scale [app] [num]` - Scale app to a number of instances.
+- `hubot app restart [app]` - Restart an app.
+- `hubot app scale [app]` - Scale an app to change instances, memory, and disk space.
 - `hubot app start [app]` - Start an app.
 - `hubot app status [app]` - Get status for an app.
 - `hubot app stop [app]` - Stop an app.
