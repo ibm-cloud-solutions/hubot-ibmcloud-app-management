@@ -51,7 +51,7 @@ function waitForMessageQueue(room, len){
 
 // Passing arrow functions to mocha is discouraged: https://mochajs.org/#arrow-functions
 // return promises from mocha tests rather than calling done() - http://tobyho.com/2015/12/16/mocha-with-promises/
-describe('Interacting with Bluemix via Slack', function() {
+describe('Interacting with Bluemix through regular expression interface', function() {
 
 	let room;
 	let cf;

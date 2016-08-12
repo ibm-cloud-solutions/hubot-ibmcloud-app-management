@@ -44,7 +44,7 @@ const i18n = new (require('i18n-2'))({
 // At some point we need to toggle this setting based on some user input.
 i18n.setLocale('en');
 
-const STOP = /(app\srestart)\s(.*)/i;
+const RESTART = /(app\srestart)\s(.*)/i;
 
 module.exports = (robot) => {
 	var switchBoard = new Conversation(robot);
@@ -63,7 +63,7 @@ module.exports = (robot) => {
 	});
 
 	// RegEx match
-	robot.respond(STOP, {id: 'bluemix.app.restart'}, (res) => {
+	robot.respond(RESTART, {id: 'bluemix.app.restart'}, (res) => {
 		robot.logger.debug(`${TAG}: bluemix.app.restart - RegEx match - res.message.text=${res.message.text}.`);
 		processAppRestart(robot, res, res.match[2]);
 	});
