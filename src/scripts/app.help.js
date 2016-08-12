@@ -74,7 +74,8 @@ module.exports = (robot) => {
 		help += `${robot.name} app list|show  - ` + i18n.__('help.app.list') + '\n';
 		help += `${robot.name} app logs [app] - ` + i18n.__('help.app.logs') + '\n';
 		help += `${robot.name} app restage [app] - ` + i18n.__('help.app.restage') + '\n';
-		help += `${robot.name} app scale [app] [num]  - ` + i18n.__('help.app.scale') + '\n';
+		help += `${robot.name} app restart [app] - ` + i18n.__('help.app.restart') + '\n';
+		help += `${robot.name} app scale [app]  - ` + i18n.__('help.app.scale') + '\n';
 		help += `${robot.name} app start [app] - ` + i18n.__('help.app.start') + '\n';
 		help += `${robot.name} app status [app] - ` + i18n.__('help.app.status') + '\n';
 		help += `${robot.name} app stop [app] - ` + i18n.__('help.app.stop') + '\n';
