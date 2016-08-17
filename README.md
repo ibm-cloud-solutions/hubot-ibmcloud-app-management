@@ -20,8 +20,8 @@ A hubot script for management of your the IBM Cloud apps.
 Steps for adding this to your existing hubot:
 
 1. `cd` into your hubot directory
-2. Install the app management functionality with `npm install hubot-app-management --save`
-3. Add `hubot-app-management` to your `external-scripts.json`
+2. Install the app management functionality with `npm install hubot-ibmcloud-app-management --save`
+3. Add `hubot-ibmcloud-app-management` to your `external-scripts.json`
 4. Add the necessary environment variables:
 ```
 export HUBOT_BLUEMIX_API=<Bluemix API URL>
