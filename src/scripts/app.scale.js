@@ -26,6 +26,7 @@ const cf = require('hubot-cf-convenience');
 const utils = require('hubot-ibmcloud-utils').utils;
 const Conversation = require('hubot-conversation');
 const activity = require('hubot-ibmcloud-activity-emitter');
+const entities = require('../lib/app.entities');
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -87,6 +88,9 @@ function getSuccessMessage(name, newScaleInfo) {
 }
 
 module.exports = (robot) => {
+
+	// Register entity handling functions
+	entities.registerEntityFunctions();
 
 	// for dialog
 	const switchBoard = new Conversation(robot);

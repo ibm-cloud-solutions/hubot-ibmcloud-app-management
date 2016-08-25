@@ -27,6 +27,7 @@ const palette = require('hubot-ibmcloud-utils').palette;
 const utils = require('hubot-ibmcloud-utils').utils;
 const activity = require('hubot-ibmcloud-activity-emitter');
 const dateformat = require('dateformat');
+const entities = require('../lib/app.entities');
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -48,6 +49,9 @@ i18n.setLocale('en');
 const STATUS = /(app\s(state|status))\s(.*)/i;
 
 module.exports = (robot) => {
+
+	// Register entity handling functions
+	entities.registerEntityFunctions();
 
 	// Natural Language match
 	robot.on('bluemix.app.status', (res, parameters) => {

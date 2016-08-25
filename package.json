@@ -3,7 +3,7 @@
   "version": "0.0.46",
   "description": "hubot-ibmcloud-app-management provides Bluemix application management functionality.",
   "main": "index.js",
-  "respository": {
+  "repository": {
     "url": "https://github.com/ibm-cloud-solutions/hubot-ibmcloud-app-management",
     "type": "git"
   },
@@ -58,7 +58,7 @@
     "cf-client": "latest",
     "hubot-cf-convenience": ">=0.0.4",
     "hubot-ibmcloud-activity-emitter": ">=0.0.2",
-    "hubot-ibmcloud-cognitive-lib": ">=0.0.18",
+    "hubot-ibmcloud-cognitive-lib": ">=0.0.37",
     "hubot-ibmcloud-utils": ">=0.0.8",
     "dateformat": "^1.0.12",
     "hubot-conversation": "^1.1.1",

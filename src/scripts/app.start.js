@@ -24,6 +24,7 @@ var TAG = path.basename(__filename);
 
 const cf = require('hubot-cf-convenience');
 const activity = require('hubot-ibmcloud-activity-emitter');
+const entities = require('../lib/app.entities');
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -45,6 +46,9 @@ i18n.setLocale('en');
 const START = /(app\sstart)\s(.*)/i;
 
 module.exports = (robot) => {
+
+	// Register entity handling functions
+	entities.registerEntityFunctions();
 
 	// Natural Language match
 	robot.on('bluemix.app.start', (res, parameters) => {

@@ -42,8 +42,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application for which you want the logs?"
+			       "prompt": "OK. What is the name of the application for which you want the logs?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   },
@@ -58,8 +60,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application you want to remove?"
+			       "prompt": "OK. What is the name of the application you want to remove?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   },
@@ -73,8 +77,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application you want to restage?"
+			       "prompt": "OK. What is the name of the application you want to restage?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   },
@@ -91,8 +97,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application you want to start?"
+			       "prompt": "OK. What is the name of the application you want to start?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   },
@@ -123,8 +131,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application you want to scale?"
+			       "prompt": "OK. What is the name of the application you want to scale?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   },
@@ -143,8 +153,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application you want to start?"
+			       "prompt": "OK. What is the name of the application you want to start?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   },
@@ -160,8 +172,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application for which you want the status?"
+			       "prompt": "OK. What is the name of the application for which you want the status?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   },
@@ -182,8 +196,10 @@
 	       "parameters" : [
 			   {
 			       "name": "appname",
+			       "title": "application name",
 			       "type": "entity",
-			       "prompt": "OK. What is the name of the application you want to stop?"
+			       "prompt": "OK. What is the name of the application you want to stop?",
+			       "entityfunction": "funcappname"
 			   }
 	       ]
 	   }

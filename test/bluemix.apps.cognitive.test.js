@@ -38,10 +38,12 @@ describe('Interacting with Natural Language -', function() {
 	let room;
 	let cf;
 
-	before(function() {
+	before(function(done) {
 		mockUtils.setupMockery();
 		cf = require('hubot-cf-convenience');
-		return cf.promise.then();
+		return cf.promise.then(function() {
+			done();
+		});
 	});
 
 	beforeEach(function() {
@@ -387,6 +389,20 @@ describe('Interacting with Natural Language -', function() {
 			// 1. Mock Natural Language message by calling emit.
 			var res = { message: {text: 'I want to restart app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.restart', res, {});
+		});
+	});
+
+	context('verify entity functions', function() {
+
+		it('should retrieve set of app names', function(done) {
+			const entities = require('../src/lib/app.entities');
+			var res = { message: {text: '', user: {id: 'mimiron'}}, response: room };
+			entities.getAppNames(room.robot, res, 'appname', {}).then(function(appNames) {
+				expect(appNames.length).to.eql(4);
+				done();
+			}).catch(function(error) {
+				done(error);
+			});
 		});
 	});
 });
