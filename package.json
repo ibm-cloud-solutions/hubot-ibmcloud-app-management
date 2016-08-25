@@ -1,6 +1,6 @@
 {
   "name": "hubot-ibmcloud-app-management",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "hubot-ibmcloud-app-management provides Bluemix application management functionality.",
   "main": "index.js",
   "repository": {
