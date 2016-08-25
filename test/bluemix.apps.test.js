@@ -757,17 +757,40 @@ describe('Interacting with Bluemix through regular expression interface', functi
 		});
 	});
 
-	context('user calls `app remove`', function() {
-		beforeEach(function() {
-			// Don't move on from this until the promise resolves
-			room.user.say('mimiron', `@hubot app remove ${validApp}Name`);
-			return room.user.say('mimiron', `@hubot app remove ${invalidApp}Name`);
+	context('user calls `app remove` for valid app', function() {
+		it('should respond result in expected error', function(done) {
+			return room.user.say('mimiron', `@hubot app remove ${validApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.remove.prompt', validApp + 'Name')]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 5);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.remove.in.progress', validApp + 'Name', 'testSpace')]);
+				expect(room.messages[4]).to.eql(['hubot', '@mimiron ' + i18n.__('app.remove.success', validApp + 'Name')]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
 		});
+	});
 
-		it('should respond with check', function() {
-			expect(room.messages.length).to.eql(4);
-			expect(room.messages[2]).to.eql(['hubot', '@mimiron ' + i18n.__('app.remove.prompt', validApp + 'Name')]);
-			return room.user.say('mimiron', 'yes');
+	context('user calls `app remove` for invalid app', function() {
+		it('should respond result in expected error', function(done) {
+			return room.user.say('mimiron', `@hubot app remove ${invalidApp}Name`).then(() => {
+				return waitForMessageQueue(room, 2);
+			}).then(() => {
+				expect(room.messages[1]).to.eql(['hubot', '@mimiron ' + i18n.__('app.remove.prompt', invalidApp + 'Name')]);
+				room.user.say('mimiron', '@hubot yes');
+				return waitForMessageQueue(room, 5);
+			}).then(() => {
+				expect(room.messages[3]).to.eql(['hubot', '@mimiron ' + i18n.__('app.remove.in.progress', invalidApp + 'Name', 'testSpace')]);
+				let embeddedError = i18n.__('app.general.not.found', invalidApp + 'Name', 'testSpace');
+				expect(room.messages[4]).to.eql(['hubot', '@mimiron ' + i18n.__('app.remove.failure', invalidApp + 'Name', embeddedError)]);
+				done();
+			}).catch((error) => {
+				done(error);
+			});
 		});
 	});
 
