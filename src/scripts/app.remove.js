@@ -95,8 +95,6 @@ module.exports = (robot) => {
 				}
 				appGuid = result.metadata.guid;
 				robot.logger.info(`${TAG}: Asynch call using cf library to remove app ${name} in space ${activeSpace.name}.`);
-				let message = i18n.__('app.remove.in.progress', name, cf.activeSpace().name);
-				robot.emit('ibmcloud.formatter', { response: res, message: message});
 				return cf.Apps.remove(appGuid);
 			}).then(() => {
 				robot.logger.info(`${TAG}: Removal of app ${name} in space ${activeSpace.name} was successful.`);
