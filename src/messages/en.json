@@ -56,9 +56,9 @@
 	"help.app.logs": "Grab recent logs for [app].",
 	"help.app.restage": "Restage the [app].",
 	"help.app.scale": "Scale the [app] in the active space.",
-	"help.app.start": "Starts the contatiner in the active space.",
+	"help.app.start": "Starts the app in the active space.",
 	"help.app.status": "Get status for a app in the active space.",
-	"help.app.stop": "Stops the contatiner in the active space.",
+	"help.app.stop": "Stops the app in the active space.",
 	"app.logs.inspecting": "Checking on *%s* in the *%s* space. Change spaces using *space set [space_name]*.",
 	"app.logs.not.found": "Could not find app *%s*.",
 	"app.logs.too.long": "The logs are too long.",
@@ -76,6 +76,6 @@
 	"cognitive.parse.problem.status": "I'm having problems understanding the name of your app. To display the status of an app use *app status [app]*",
 	"cognitive.parse.problem.stop": "I'm having problems understanding the name of your app. To stop an app use *app stop [app]*",
 	"general.safe.this.time": "Ok, *%s* is safe this time around.",
-	"app.stage.failure": "app.stage.failure",
-	"help.app.restart": "help.app.restart"
+	"app.stage.failure": "Failed to stage *%s*: >%s",
+	"help.app.restart": "Restarts the app in the active space."
 }
