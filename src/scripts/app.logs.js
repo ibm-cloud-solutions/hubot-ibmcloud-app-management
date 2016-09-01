@@ -120,7 +120,8 @@ module.exports = (robot) => {
 				robot.emit('ibmcloud.formatter', { response: res, message: message});
 				let prompt = i18n.__('app.logs.too.long.prompt');
 				utils.getExpectedResponse(res, robot, switchBoard, prompt, /(all of them)|(\d+)/i).then((dialogResult) => {
-					if (dialogResult.match[1].startsWith('all')) {
+					// Note: if a number was entered, then match[1] will be undefined.  Must protect for it.
+					if (dialogResult.match[1] && dialogResult.match[1].startsWith('all')) {
 						// page through all logs
 						logOutput = logOutput.split('\n');
 						let output = '';
@@ -141,7 +142,8 @@ module.exports = (robot) => {
 						robot.emit('ibmcloud.formatter', { response: res, message: message});
 					}
 					else {
-						var count = parseInt(dialogResult, 10);
+						// match[1] will be undefined and match[2] will have the number entered.
+						var count = parseInt(dialogResult.match[2], 10);
 						let message = trim(logOutput, count);
 						robot.emit('ibmcloud.formatter', { response: res, message: message});
 					}
