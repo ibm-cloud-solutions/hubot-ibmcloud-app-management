@@ -43,8 +43,14 @@
     "rewire": "2.5.1"
   },
   "peerDependencies": {
+    "cf-client": "latest",
     "hubot": "^2.19.0",
+    "hubot-cf-convenience": ">=0.0.4",
+    "hubot-conversation": "^1.1.1",
+    "hubot-ibmcloud-activity-emitter": ">=0.0.2",
+    "hubot-ibmcloud-cognitive-lib": ">=0.0.37",
     "hubot-ibmcloud-formatter": ">=0.0.30",
+    "hubot-ibmcloud-utils": ">=0.0.8",
     "i18n-2": "*"
   },
   "engines": {
@@ -55,13 +61,7 @@
     "index.js"
   ],
   "dependencies": {
-    "cf-client": "latest",
-    "hubot-cf-convenience": ">=0.0.4",
-    "hubot-ibmcloud-activity-emitter": ">=0.0.2",
-    "hubot-ibmcloud-cognitive-lib": ">=0.0.37",
-    "hubot-ibmcloud-utils": ">=0.0.8",
     "dateformat": "^1.0.12",
-    "hubot-conversation": "^1.1.1",
     "string-length": "^1.0.1"
   }
 }
