@@ -43,14 +43,13 @@
     "rewire": "2.5.1"
   },
   "peerDependencies": {
-    "cf-client": "latest",
     "hubot": "^2.19.0",
-    "hubot-cf-convenience": ">=0.0.4",
+    "hubot-cf-convenience": "latest",
     "hubot-conversation": "^1.1.1",
-    "hubot-ibmcloud-activity-emitter": ">=0.0.2",
-    "hubot-ibmcloud-cognitive-lib": ">=0.0.37",
-    "hubot-ibmcloud-formatter": ">=0.0.30",
-    "hubot-ibmcloud-utils": ">=0.0.8",
+    "hubot-ibmcloud-activity-emitter": "latest",
+    "hubot-ibmcloud-cognitive-lib": "latest",
+    "hubot-ibmcloud-formatter": "latest",
+    "hubot-ibmcloud-utils": "latest",
     "i18n-2": "*"
   },
   "engines": {
