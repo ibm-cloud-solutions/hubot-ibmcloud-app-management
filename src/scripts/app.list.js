@@ -21,8 +21,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const cf = require('hubot-cf-convenience');
 const palette = require('hubot-ibmcloud-utils').palette;
@@ -77,7 +77,7 @@ module.exports = (robot) => {
 			}
 			robot.logger.debug(`${TAG}: Obtained space summary for ${spaceName}: ${resultStr}.`);
 			// Iterate the apps and create a suitable response.
-			var apps = result.apps;
+			let apps = result.apps;
 
 			const attachments = apps.map((app) => {
 				const attachment = {
@@ -99,7 +99,7 @@ module.exports = (robot) => {
 			});
 
 			// const appNames = [];
-			var appNames = apps.map(function(app){
+			let appNames = apps.map(function(app){
 				return app.name;
 			});
 			nlcconfig.updateGlobalParameterValues('IBMcloudAppManagment_appname', appNames);

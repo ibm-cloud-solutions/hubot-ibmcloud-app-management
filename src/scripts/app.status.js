@@ -19,8 +19,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const cf = require('hubot-cf-convenience');
 const palette = require('hubot-ibmcloud-utils').palette;
@@ -74,9 +74,9 @@ module.exports = (robot) => {
 
 
 	function processAppStatus(robot, res, name){
-		var appSummary = null;
-		var appStats = null;
-		var appInstances = null;
+		let appSummary = null;
+		let appStats = null;
+		let appInstances = null;
 		let appGuid;
 
 		const activeSpace = cf.activeSpace(robot, res);
@@ -163,8 +163,8 @@ module.exports = (robot) => {
 
 						// Add the list of bound services if they exist.
 						if (appSummary.services.length > 0) {
-							var serviceList = '';
-							for (var i = 0; i < appSummary.services.length; i++) {
+							let serviceList = '';
+							for (let i = 0; i < appSummary.services.length; i++) {
 								if (i !== 0) {
 									serviceList += ', ';
 								}

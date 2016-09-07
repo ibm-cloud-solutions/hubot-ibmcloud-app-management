@@ -19,8 +19,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const cf = require('hubot-cf-convenience');
 const utils = require('hubot-ibmcloud-utils').utils;
@@ -50,7 +50,7 @@ i18n.setLocale('en');
 const SCALE = /app\sscale\s+(\S+)(\sto)?(\s+([0-9]+)\sinstances)?(\s+([0-9]+)\smemory)?(\s+([0-9]+)\sdisk)?/i;
 
 function getSuccessMessage(name, newScaleInfo) {
-	var msg;
+	let msg;
 	if (newScaleInfo.instances) {
 		if (newScaleInfo.memory) {
 			if (newScaleInfo.disk_quota) {
@@ -191,7 +191,7 @@ module.exports = (robot) => {
 	function getScaleInformation(res, name, currentScaleInfo, reqScaleInfo) {
 		return new Promise(function(resolve, reject) {
 
-			var newScaleInfo = {};
+			let newScaleInfo = {};
 
 			// If any values specified on the request, use them
 			if (reqScaleInfo.instances || reqScaleInfo.memory || reqScaleInfo.disk_quota) {
@@ -243,7 +243,7 @@ module.exports = (robot) => {
 			// Start conversation and wait for response
 			let prompt1 = i18n.__('app.scale.prompt.set.' + promptKey, name, currentValue);
 			utils.getExpectedResponse(res, robot, switchBoard, prompt1, /(yes|no)/i).then((dialogResult) => {
-				var reply = dialogResult.match[1].trim();
+				let reply = dialogResult.match[1].trim();
 				robot.logger.debug(`${TAG}: Dialog reply is: ${reply}`);
 
 				// If response is yes, start conversation to obtain the desired value
@@ -251,7 +251,7 @@ module.exports = (robot) => {
 
 					let prompt2 = i18n.__('app.scale.prompt.value.' + promptKey);
 					utils.getExpectedResponse(res, robot, switchBoard, prompt2, /(.*)/i).then((dialogResult) => {
-						var reply = dialogResult.match[1].trim();
+						let reply = dialogResult.match[1].trim();
 						robot.logger.debug(`${TAG}: Dialog reply is: ${reply}`);
 
 						// If the response is not a number, return undefined

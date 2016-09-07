@@ -12,7 +12,7 @@ const nlcconfig = require('hubot-ibmcloud-cognitive-lib').nlcconfig;
 const NAMESPACE = 'IBMcloudAppManagment';
 const PARAM_APPNAME = 'appname';
 
-var functionsRegistered = false;
+let functionsRegistered = false;
 
 
 function buildGlobalName(parameterName) {
@@ -33,7 +33,7 @@ function getAppNames(robot, res, parameterName, parameters) {
 	return new Promise(function(resolve, reject) {
 		const spaceGuid = cf.activeSpace(robot, res).guid;
 		cf.Spaces.getSummary(spaceGuid).then((result) => {
-			var appNames = result.apps.map(function(app){
+			let appNames = result.apps.map(function(app){
 				return app.name;
 			});
 			nlcconfig.updateGlobalParameterValues(buildGlobalName(PARAM_APPNAME), appNames);
