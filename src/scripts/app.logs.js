@@ -21,8 +21,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const dateformat = require('dateformat');
 const len = require('string-length');
@@ -56,7 +56,7 @@ module.exports = (robot) => {
 	// Register entity handling functions
 	entities.registerEntityFunctions();
 
-	var switchBoard = new Conversation(robot);
+	let switchBoard = new Conversation(robot);
 
 	// Natural Language match
 	robot.on('bluemix.app.logs', (res, parameters) => {
@@ -143,7 +143,7 @@ module.exports = (robot) => {
 					}
 					else {
 						// match[1] will be undefined and match[2] will have the number entered.
-						var count = parseInt(dialogResult.match[2], 10);
+						let count = parseInt(dialogResult.match[2], 10);
 						let message = trim(logOutput, count);
 						robot.emit('ibmcloud.formatter', { response: res, message: message});
 					}

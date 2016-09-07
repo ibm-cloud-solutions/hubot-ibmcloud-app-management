@@ -19,8 +19,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const cf = require('hubot-cf-convenience');
 const utils = require('hubot-ibmcloud-utils').utils;
@@ -52,7 +52,7 @@ module.exports = (robot) => {
 	// Register entity handling functions
 	entities.registerEntityFunctions();
 
-	var switchBoard = new Conversation(robot);
+	let switchBoard = new Conversation(robot);
 
 	// Natural Language match
 	robot.on('bluemix.app.restage', (res, parameters) => {

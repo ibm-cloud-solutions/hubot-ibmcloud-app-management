@@ -19,7 +19,7 @@ const validApp = 'testApp1Name';
 // It will read from a peer messages.json file.  Later, these
 // messages can be referenced throughout the module.
 // --------------------------------------------------------------
-var i18n = new (require('i18n-2'))({
+const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
@@ -71,7 +71,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 
-			var res = { message: {text: 'I want help with apps'}, response: room };
+			let res = { message: {text: 'I want help with apps'}, response: room };
 			room.robot.emit('bluemix.app.help', res, {});
 
 		});
@@ -92,7 +92,7 @@ describe('Interacting with Natural Language -', function() {
 				}
 			});
 
-			var res = { message: {text: 'I want to list my apps'}, response: room };
+			let res = { message: {text: 'I want to list my apps'}, response: room };
 			room.robot.emit('bluemix.app.list', res, {});
 
 		});
@@ -106,7 +106,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'Show me the logs for app testApp1Name', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'Show me the logs for app testApp1Name', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.logs', res, { appname: 'testApp1Name' });
 		});
 
@@ -117,7 +117,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'Show me the logs', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'Show me the logs', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.logs', res, {});
 		});
 	});
@@ -138,7 +138,7 @@ describe('Interacting with Natural Language -', function() {
 			});
 
 			// 2. Handle the dialog questions.
-			var replyFn = function(msg){
+			let replyFn = function(msg){
 				// 3. Sends a message to the room with the response to dialog requesting app name.
 				if (msg === 'Are you sure that you want to remove *testApp1Name*?') {
 					room.user.say('mimiron', 'yes');
@@ -150,7 +150,7 @@ describe('Interacting with Natural Language -', function() {
 			};
 
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to remove app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			let res = { message: {text: 'I want to remove app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
 			room.robot.emit('bluemix.app.remove', res, { appname: 'testApp1Name' });
 		});
 
@@ -161,7 +161,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to remove app', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'I want to remove app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.remove', res, {});
 		});
 	});
@@ -177,14 +177,14 @@ describe('Interacting with Natural Language -', function() {
 			});
 
 			// 2. Handle the dialog question.
-			var replyFn = function(msg){
+			let replyFn = function(msg){
 				if (msg === 'Are you sure that you want to restage *testApp1Name*?') {
 					room.user.say('mimiron', 'yes');
 				}
 			};
 
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to restage app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			let res = { message: {text: 'I want to restage app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
 			room.robot.emit('bluemix.app.restage', res, { appname: 'testApp1Name' });
 
 		});
@@ -196,7 +196,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to restage app', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'I want to restage app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.restage', res, {});
 		});
 	});
@@ -206,7 +206,7 @@ describe('Interacting with Natural Language -', function() {
 		it('should scale `testApp1Name` when user says `I want to scale app testApp1Name.`', function(done) {
 
 			// 2. Handle the dialog question.
-			var replyFn = function(msg){
+			let replyFn = function(msg){
 				if (msg.includes(i18n.__('app.scale.prompt.set.instances', 'testApp1Name', 2))) {
 					room.user.say('mimiron', 'no');
 				}
@@ -233,7 +233,7 @@ describe('Interacting with Natural Language -', function() {
 			});
 
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to scale app testApp1Name.', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			let res = { message: {text: 'I want to scale app testApp1Name.', user: {id: 'mimiron'}}, response: room, reply: replyFn };
 			room.robot.emit('bluemix.app.scale', res, { appname: 'testApp1Name' });
 
 		});
@@ -245,7 +245,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to scale app', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'I want to scale app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.scale', res, {});
 		});
 	});
@@ -260,7 +260,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 
-			var res = { message: {text: 'I want to start app testApp1Name'}, response: room };
+			let res = { message: {text: 'I want to start app testApp1Name'}, response: room };
 			room.robot.emit('bluemix.app.start', res, { appname: 'testApp1Name' });
 		});
 
@@ -273,7 +273,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 
-			var res = { message: {text: 'I want to start app testApp4Name'}, response: room };
+			let res = { message: {text: 'I want to start app testApp4Name'}, response: room };
 			room.robot.emit('bluemix.app.start', res, { appname: 'testApp4Name' });
 		});
 
@@ -284,7 +284,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to start app', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'I want to start app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.start', res, {});
 		});
 	});
@@ -307,7 +307,7 @@ describe('Interacting with Natural Language -', function() {
 			});
 
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'What is the status of app testApp1Name?', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'What is the status of app testApp1Name?', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.status', res, { appname: 'testApp1Name' });
 
 		});
@@ -319,7 +319,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'What is the status of app', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'What is the status of app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.status', res, {});
 		});
 	});
@@ -334,7 +334,7 @@ describe('Interacting with Natural Language -', function() {
 			});
 
 			// 2. Handle the dialog question.
-			var replyFn = function(msg){
+			let replyFn = function(msg){
 				// 3. Respond to open dialog.
 				if (msg.indexOf('Are you sure that you want to stop') >= 0) {
 					return room.user.say('mimiron', 'yes');
@@ -342,7 +342,7 @@ describe('Interacting with Natural Language -', function() {
 			};
 
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to stop app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			let res = { message: {text: 'I want to stop app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
 			room.robot.emit('bluemix.app.stop', res, { appname: 'testApp1Name' });
 		});
 
@@ -353,7 +353,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to stop app', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'I want to stop app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.stop', res, {});
 		});
 	});
@@ -368,7 +368,7 @@ describe('Interacting with Natural Language -', function() {
 			});
 
 			// 2. Handle the dialog question.
-			var replyFn = function(msg){
+			let replyFn = function(msg){
 				// 3. Respond to open dialog.
 				if (msg.indexOf('Are you sure that you want to restart') >= 0) {
 					return room.user.say('mimiron', 'yes');
@@ -376,7 +376,7 @@ describe('Interacting with Natural Language -', function() {
 			};
 
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to restart app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			let res = { message: {text: 'I want to restart app testApp1Name', user: {id: 'mimiron'}}, response: room, reply: replyFn };
 			room.robot.emit('bluemix.app.restart', res, { appname: 'testApp1Name' });
 		});
 
@@ -387,7 +387,7 @@ describe('Interacting with Natural Language -', function() {
 				done();
 			});
 			// 1. Mock Natural Language message by calling emit.
-			var res = { message: {text: 'I want to restart app', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'I want to restart app', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('bluemix.app.restart', res, {});
 		});
 	});
@@ -396,7 +396,7 @@ describe('Interacting with Natural Language -', function() {
 
 		it('should retrieve set of app names', function(done) {
 			const entities = require('../src/lib/app.entities');
-			var res = { message: {text: '', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: '', user: {id: 'mimiron'}}, response: room };
 			entities.getAppNames(room.robot, res, 'appname', {}).then(function(appNames) {
 				expect(appNames.length).to.eql(4);
 				done();
